@@ -1,0 +1,61 @@
+\documentclass[a4paper,12pt,landscape]{article}
+
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+
+\usepackage{tikz-er2}
+\usetikzlibrary{calc}
+\begin{document}
+
+\thispagestyle{empty}
+
+\usetikzlibrary{positioning}
+
+
+\centering
+\scalebox{.5}{
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+
+  \node[entity] (pessoa) {pessoa};
+  \node[attribute] (nome) [above=of pessoa] {nome} edge (pessoa);
+  \node[attribute] (pessoaID) [above right=of pessoa] {\key{pessoaID}} edge (pessoa);
+  \node[attribute] (dataNascimento) [right=of pessoa] {dataNascimento} edge (pessoa);
+  \node[isa] (pessoaISA) [below=1cm of pessoa] {ISA} edge (pessoa);
+  \node[entity] (utilizador) [below left =1cm of pessoaISA] {utilizador} edge (pessoaISA);
+    \node[attribute] (ultimoLogin) [below  =1cm of utilizador] {últimoLogin} edge (utilizador);
+  
+
+  
+
+
+  
+
+  \node[entity] (conteudo) [left = 15cm of utilizador] {conteudo};
+
+  \node[attribute] (conteudoID) [above left= 1cm of conteudo] {\key{conteudoID}} edge (conteudo);
+  \node[attribute] (tituloConteudo) [left=  1cm of conteudo] {tituloConteudo} edge (conteudo);
+  \node[attribute] (dataLancamento) [below left= 1cm of conteudo] {dataLançamento} edge (conteudo);
+  \node[relationship] (produz) [above = of conteudo] {produz} edge [total] (conteudo);
+  \node[entity] (produtora) [above= of produz ] {produtora} edge [<-] (produz);
+  \node[attribute] (nomeProdutora) [above = of produtora] {nomeProdutora} edge (produtora);
+  \node[attribute] (produtoraID) [above left = of produtora] {\key{produtoraID}} edge (produtora);
+    \node[attribute] (nacionalidadeProdutora) [above right = of produtora] {nacionalidadeProdutora} edge (produtora);
+
+    \node[relationship] (consome) [left = 5cm of utilizador] {consome} edge [] (conteudo) edge [total] (utilizador);
+
+
+  
+
+
+    \node[relationship] (categoriza) [above right= 2cm of conteudo] {categoriza} edge [total] (conteudo) ;
+  \node[entity] (categoria) [above =of categoriza] {categoria} edge [] (categoriza);
+  \node[attribute] (nomeCategoria) [ right = 1cm of categoria ] {\key{nomeCategoria}} edge (categoria);
+
+
+ \draw[thick]     ($(conteudo.north west)+(-0.6,0.6)$) rectangle ($(utilizador.south east)+(0.6,-0.6)$);
+
+
+\end{tikzpicture}}
+
+\end{document}

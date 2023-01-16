@@ -1,0 +1,98 @@
+\documentclass[a4paper,12pt,landscape]{article}
+
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+
+\usepackage{tikz-er2}
+\usetikzlibrary{calc}
+\begin{document}
+
+\thispagestyle{empty}
+
+\usetikzlibrary{positioning}
+
+
+\centering
+\scalebox{.5}{
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+
+  \node[entity] (pessoa) {pessoa};
+  \node[attribute] (nome) [above=of pessoa] {nome} edge (pessoa);
+  \node[attribute] (pessoaID) [above right=of pessoa] {\key{pessoaID}} edge (pessoa);
+  \node[attribute] (dataNascimento) [right=of pessoa] {dataNascimento} edge (pessoa);
+  \node[isa] (pessoaISA) [below=1cm of pessoa] {ISA} edge (pessoa);
+  \node[entity] (utilizador) [below left =1cm of pessoaISA] {utilizador} edge (pessoaISA);
+    \node[attribute] (ultimoLogin) [below  =1cm of utilizador] {últimoLogin} edge (utilizador);
+  \node[entity] (artista) [below right =1cm of pessoaISA] {artista} edge (pessoaISA);
+
+  \node[isa] (artistaISA) [below=1cm of artista] {ISA} edge [total] (artista);
+  \node[entity] (ator) [below right =1cm of artistaISA] {ator} edge (artistaISA);
+  \node[entity] (realizador) [below left =1cm of artistaISA] {realizador} edge (artistaISA);
+
+
+  
+
+  \node[entity] (conteudo) [left = 15cm of utilizador] {conteudo};
+
+  \node[attribute] (conteudoID) [above left= 1cm of conteudo] {\key{conteudoID}} edge (conteudo);
+  \node[attribute] (tituloConteudo) [left=  1cm of conteudo] {tituloConteudo} edge (conteudo);
+  \node[attribute] (dataLancamento) [below left= 1cm of conteudo] {dataLançamento} edge (conteudo);
+  \node[relationship] (produzidoPor) [above = of conteudo] {produzidoPor} edge [total] (conteudo);
+  \node[entity] (produtora) [above= of produzidoPor ] {produtora} edge [<-] (produzidoPor);
+  \node[attribute] (nomeProdutora) [above = of produtora] {nomeProdutora} edge (produtora);
+  \node[attribute] (produtoraID) [above left = of produtora] {\key{produtoraID}} edge (produtora);
+    \node[attribute] (nacionalidadeProdutora) [above right = of produtora] {nacionalidadeProdutora} edge (produtora);
+
+  
+  \node[isa, label=below:disj.] (conteudoISA) [below =of conteudo] {ISA} edge [total] (conteudo);
+  \node[entity] (filme) [below right = of conteudoISA ] {filme} edge(conteudoISA);
+  \node[attribute] (duracaoFilme) [below left = of filme ] {duraçãoFilme} edge (filme);
+  \node[entity] (serie) [below left = of conteudoISA] {serie} edge (conteudoISA);
+  \node[ident relationship] (pertenceA) [left=of serie] {pertenceA} edge [->] (serie);
+  \node[weak entity] (temporada) [below = of pertenceA] {temporada} edge [total] (pertenceA);
+  \node[attribute] (tituloTemporada) [right= of temporada] {tituloTemporada} edge (temporada);
+  \node[attribute] (numTemp) [below right= 1cm of temporada] {\discriminator{numTemp}} edge (temporada);
+  \node[ident relationship] (contido) [below = of temporada] {contido} edge [->] (temporada);
+  \node[weak entity] (episodio) [right= of contido] {episodio} edge [total] (contido);
+    \node[attribute] (numEpi) [below right= of episodio] {\discriminator{numEpi}} edge (episodio);
+  \node[attribute] (tituloEpisodio) [above right= of episodio] {tituloEpisodio} edge (episodio);
+  \node[attribute] (duracaoEpisodio) [right= of episodio] {duraçãoEpisodio} edge (episodio);
+
+
+  \node[relationship] (consome) [left = 4cm of utilizador] {consome} edge [] (conteudo) edge [total] (utilizador);
+  \node[ident relationship] (avalia) [above = of consome] {avalia} edge [->] (consome);
+  \node[weak entity] (avaliacao) [right =of avalia] {avaliação} edge [total] (avalia);
+  \node[attribute] (data) [below right=1cm of avaliacao] {data} edge (avaliacao);
+  \node[attribute] (valor) [above right=of avaliacao] {valor} edge (avaliacao);
+  \node[attribute] (avaliacaoID) [above =of avaliacao] {\discriminator{avaliaçãoID}} edge (avaliacao);
+
+  \node[relationship] (premiado) [below = 5cm of avalia ] {premiado} edge (conteudo);
+  \node[entity] (premio) [right= 2.5cm of premiado] {premio} edge [total] (premiado);
+  \node[attribute] (nomePremio) [below left = 1cm of premio] {{nomePrémio}} edge (premio);
+  \node[attribute] (dataPremio) [above left = 0.5cm of premio] {{dataPrémio}} edge (premio);
+    \node[attribute] (premioID) [below = 1cm of premio] {\key{prémioID}} edge (premio);
+  
+      \node[relationship] (realizadoPor) [below = 1cm of premiado] {realizadoPor} edge [total] (conteudo);
+
+
+
+  \node[attribute] (orcamento) [below right= 1cm of realizadoPor] {orçamento} edge (realizadoPor);
+%  \draw[total,<-  ] (utilizador) |- (avalia);
+  \node[relationship] (atua) [below= 0.5cm of realizadoPor] {atua} edge [] (conteudo) ;
+  \node[attribute] (nomeNoEcra) [below left =of atua ] {nomeNoEcrã} edge (atua);
+  \draw[total] (ator) |- (atua);
+  \draw[link,<-] (realizador) |- (realizadoPor);
+
+
+  \node[relationship] (categoriza) [above right= 2cm of conteudo] {categoriza} edge [total] (conteudo) ;
+  \node[entity] (categoria) [above =of categoriza] {categoria} edge [] (categoriza);
+  \node[attribute] (nomeCategoria) [ right = 1cm of categoria ] {\key{nomeCategoria}} edge (categoria);
+
+
+ \draw[thick]     ($(conteudo.north west)+(-0.6,0.6)$) rectangle ($(utilizador.south east)+(0.6,-0.6)$);
+
+
+\end{tikzpicture}}
+
+\end{document}

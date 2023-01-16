@@ -1,0 +1,50 @@
+\documentclass[a4paper,12pt,landscape]{article}
+
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+
+\usepackage{tikz-er2}
+\usetikzlibrary{calc}
+\begin{document}
+
+\thispagestyle{empty}
+
+\usetikzlibrary{positioning}
+
+
+\centering
+\scalebox{.5}{
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+
+  
+
+
+  
+
+  \node[entity] (conteudo) [] {conteudo};
+
+  \node[attribute] (conteudoID) [above left= 1cm of conteudo] {\key{conteudoID}} edge (conteudo);
+  \node[attribute] (tituloConteudo) [left=  1cm of conteudo] {tituloConteudo} edge (conteudo);
+  \node[attribute] (dataLancamento) [below left= 1cm of conteudo] {dataLançamento} edge (conteudo);
+  \node[isa, label=below:disj.] (conteudoISA) [below =of conteudo] {ISA} edge [total] (conteudo);
+  \node[entity] (filme) [below right = of conteudoISA ] {filme} edge(conteudoISA);
+  \node[attribute] (duracaoFilme) [below left = of filme ] {duraçãoFilme} edge (filme);
+  \node[entity] (serie) [below left = of conteudoISA] {serie} edge (conteudoISA);
+  \node[ident relationship] (pertenceA) [left=of serie] {pertenceA} edge [->] (serie);
+  \node[weak entity] (temporada) [below = of pertenceA] {temporada} edge [total] (pertenceA);
+  \node[attribute] (tituloTemporada) [right= of temporada] {tituloTemporada} edge (temporada);
+  \node[attribute] (numTemp) [below right= 1cm of temporada] {\discriminator{numTemp}} edge (temporada);
+  \node[ident relationship] (contido) [below = of temporada] {contido} edge [->] (temporada);
+  \node[weak entity] (episodio) [right= of contido] {episodio} edge [total] (contido);
+    \node[attribute] (numEpi) [below right= of episodio] {\discriminator{numEpi}} edge (episodio);
+  \node[attribute] (tituloEpisodio) [above right= of episodio] {tituloEpisodio} edge (episodio);
+  \node[attribute] (duracaoEpisodio) [right= of episodio] {duraçãoEpisodio} edge (episodio);
+
+
+
+
+
+\end{tikzpicture}}
+
+\end{document}

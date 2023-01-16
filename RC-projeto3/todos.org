@@ -1,0 +1,6 @@
+* [[elisp:(project-switch-project "~/aulas/RC/praticas/projeto3/")][projeto3]]
+** DONE testar ff:ff:ff:ff:ff
+todos os servidores vão receber independentmente do seu endereço
+** DONE mensagens devem conter a informação necessária
+confirmar se é o destino desejado, remtente, todas essas coisas
+** DONE client deve receber broadcast

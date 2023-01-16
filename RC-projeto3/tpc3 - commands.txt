@@ -1,0 +1,12 @@
+-->Para criar a imagem usamos o seguinte comando:
+docker build . -t tpc3
+
+-->Para criar os contentores fizemos o seguinte comando em vários terminais diferentes:
+docker run -ti -v path_to_folder:/tmp tpc3 bin/bash
+cd tmp
+
+-->No fim para correr o servidor começamos por correr em 3 terminais diferentes:
+python3 etherServer.py
+
+-->Depois para correr o cliente precisamos do endereço de IP do servidor que estamos à procura, por exemplo (172.17.0.2):
+python3 etherClient.py 172.17.0.2

@@ -1,0 +1,66 @@
+% Author: Pável Calado
+% the tikz-er2.sty package is available at:
+% http://tagus.inesc-id.pt/~pcalado/tikzer2/tikz-er2.html
+
+\documentclass[a4paper,12pt,landscape]{article}
+
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+
+\usepackage{tikz-er2}
+\usetikzlibrary{calc}
+\begin{document}
+
+\thispagestyle{empty}
+
+\usetikzlibrary{positioning}
+
+
+\centering
+\scalebox{.5}{
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+
+  \node[entity] (pessoa) {pessoa};
+  \node[attribute] (nome) [above=of pessoa] {nome} edge (pessoa);
+  \node[attribute] (pessoaID) [above right=of pessoa] {\key{pessoaID}} edge (pessoa);
+  \node[attribute] (dataNascimento) [right=of pessoa] {dataNascimento} edge (pessoa);
+  \node[isa] (pessoaISA) [below=1cm of pessoa] {ISA} edge (pessoa);
+  \node[entity] (utilizador) [below left =1cm of pessoaISA] {utilizador} edge (pessoaISA);
+    \node[attribute] (ultimoLogin) [below  =1cm of utilizador] {últimoLogin} edge (utilizador);
+  \node[entity] (artista) [below right =1cm of pessoaISA] {artista} edge (pessoaISA);
+
+  \node[isa] (artistaISA) [below=1cm of artista] {ISA} edge [total] (artista);
+  \node[entity] (ator) [below right =1cm of artistaISA] {ator} edge (artistaISA);
+  \node[entity] (realizador) [below left =1cm of artistaISA] {realizador} edge (artistaISA);
+
+
+  
+
+  \node[entity] (conteudo) [left = 15cm of utilizador] {conteudo};
+
+  \node[attribute] (conteudoID) [above left= 1cm of conteudo] {\key{conteudoID}} edge (conteudo);
+  \node[attribute] (tituloConteudo) [left=  1cm of conteudo] {tituloConteudo} edge (conteudo);
+  \node[attribute] (dataLancamento) [below left= 1cm of conteudo] {dataLançamento} edge (conteudo);
+  
+
+  
+  
+  \node[relationship] (consome) [left = 5cm of utilizador] {consome} edge [] (conteudo) edge [total] (utilizador);
+  
+
+  
+  
+      \node[relationship] (realizadoPor) [below left = of realizador] {realizadoPor} edge [total] (conteudo);
+
+
+
+  \node[attribute] (orcamento) [below right= 1cm of realizadoPor] {orçamento} edge (realizadoPor);
+  \node[relationship] (atua) [below= 1cm of realizadoPor] {atua} edge [] (conteudo) ;
+  \node[attribute] (nomeNoEcra) [below left =of atua ] {nomeNoEcrã} edge (atua);
+  \draw[total] (ator) |- (atua);
+  \draw[link,<-] (realizador) |- (realizadoPor);
+
+\end{tikzpicture}}
+
+\end{document}
